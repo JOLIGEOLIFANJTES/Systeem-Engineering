@@ -1,6 +1,9 @@
 #include <Arduino.h>
+#include <Talkie.h>
+#include <Vocab_US_Large.h>
+#include <Vocab_Special.h>
 #define Knop1 4
-#define Knop2 3 
+#define Knop2 2 
 #define Knop3 6 
 #define Knop4 5 
 #define Knop5 7  
@@ -141,18 +144,10 @@ void spel3(){
     if(digitalRead(Knop8) == LOW){ if(player4 ==0){player4T = counter2 - TIMEPERIOD;} player4 = player4 +1;}
     Serial.println(counter);
   }
-  Serial.println(player1T);
-  Serial.println(player2T);
-  Serial.println(player3T);
-  Serial.println(player4T);
   if (player1T < 0){player1T = player1T/-1;}
   if (player2T < 0){player2T = player2T/-1;}
   if (player3T < 0){player3T = player3T/-1;}
   if (player4T < 0){player4T = player4T/-1;}
-  Serial.println(player1T);
-  Serial.println(player2T);
-  Serial.println(player3T);
-  Serial.println(player4T);
   if (player1T >= 0 && player1T < player2T && player1T < player3T && player1T < player4T){winning = 1; winningscore = player1T /20;}
   if (player2T >= 0 && player2T < player1T && player2T < player3T && player2T < player4T){winning = 2; winningscore = player2T /20;}
   if (player3T >= 0 && player3T < player1T && player3T < player2T && player3T < player4T){winning = 3; winningscore = player3T /20;}
