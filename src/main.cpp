@@ -2,6 +2,7 @@
 #include <Talkie.h>
 #include <Vocab_US_Large.h>
 #include <Vocab_Special.h>
+#include <Vocab_US_TI99.h>
 #define Knop1 4
 #define Knop2 2 
 #define Knop3 6 
@@ -15,11 +16,14 @@ int counter = 0;
 int counter0_05S =0;
 int counter2 = 0;
 
+Talkie voice;
+
 void spel1();
 void spel2();
 void spel3();
 void spel4();
 void setupTimer1();
+void sayNumber(long n);
 
 ISR(TIMER1_COMPA_vect) {
   counter0_05S = counter0_05S +1;
@@ -41,19 +45,24 @@ void setup() {
   pinMode(Knop7, INPUT_PULLUP);
   pinMode(Knop8, INPUT_PULLUP);
   setupTimer1();
+  voice.say(spt_THERE); delay(100); voice.say(spt_ARE); delay(100); voice.say(sp3_THREE); delay(100); voice.say(spt_GAMES); delay(100); voice.say(spt_START);
 }
 
 void loop() {
 if(digitalRead(Knop1) == LOW){
+  voice.say(sp2_ONE);
   spel1();
 }
 else if(digitalRead(Knop2) == LOW){
+  voice.say(sp2_TWO);
   spel2();
 }
 else if(digitalRead(Knop3) == LOW){
+  voice.say(sp2_THREE);
   spel3();
 }
 else if(digitalRead(Knop4) == LOW){
+  voice.say(sp2_FOUR);
   spel4();
 }
 }
@@ -66,7 +75,8 @@ void spel1(){
   const int TIMEPERIOD = 30;
   int winningscore = 0;
   int oldstatusknop1, oldstatusknop2, oldstatusknop3, oldstatusknop4;
-  Serial.print("drukkkken");
+  voice.say(sp4_START);
+  setupTimer1();
   counter =0;
   while (counter < TIMEPERIOD) {
   int statusknop1 = digitalRead(Knop5);
@@ -77,7 +87,7 @@ void spel1(){
   if (statusknop3 != oldstatusknop3){if(statusknop3 == LOW){player3 = player3 +1;}}
   int statusknop4 = digitalRead(Knop8); 
   if (statusknop4 != oldstatusknop4){if(statusknop4 == LOW){player4 = player4 +1;}}
-  delay(50);
+  delay(50); 
   oldstatusknop1 = statusknop1;
   oldstatusknop2 = statusknop2;
   oldstatusknop3 = statusknop3;
@@ -89,6 +99,7 @@ void spel1(){
   if(winningscore < player3){ winning = 3; winningscore = player3;}
   if(winningscore < player4){ winning = 4; winningscore = player4;}
   Serial.print("player");Serial.print(winning);Serial.print(" has won with:");Serial.print(winningscore);Serial.print(" points");
+  voice.say(sp2_NUMBER); sayNumber(winning); voice.say(spt_WON); voice.say(spt_WITH); sayNumber(winningscore); voice.say(sp2_PRESS); 
 }
 
 void spel2(){
@@ -103,6 +114,8 @@ void spel2(){
   int player3T = 0;
   int player4T = 0;
   int winning = 0;
+  voice.say(sp4_START);
+  setupTimer1();
   counter = 0;
   counter2 =0;
   long TIMEPERIOD = random(60) * 20;
@@ -113,18 +126,21 @@ void spel2(){
     if(digitalRead(Knop6) == LOW){ if(player2 ==0){player2T = counter2 - TIMEPERIOD;} player2 = player2 +1;}
     if(digitalRead(Knop7) == LOW){ if(player3 ==0){player3T = counter2 - TIMEPERIOD;} player3 = player3 +1;}
     if(digitalRead(Knop8) == LOW){ if(player4 ==0){player4T = counter2 - TIMEPERIOD;} player4 = player4 +1;}
-    if(counter2 == TIMEPERIOD){ Serial.println("piep");}
+    if(counter2 == TIMEPERIOD){ Serial.println("piep"); voice.say(spt_NOW); setupTimer1();}
   }
   if (player1T >= 0 && player1T < player2T && player1T < player3T && player1T < player4T){winning = 1; winningscore = player1T /20;}
   if (player2T >= 0 && player2T < player1T && player2T < player3T && player2T < player4T){winning = 2; winningscore = player2T /20;}
   if (player3T >= 0 && player3T < player1T && player3T < player2T && player3T < player4T){winning = 3; winningscore = player3T /20;}
   if (player4T >= 0 && player4T < player1T && player4T < player2T && player4T < player3T){winning = 4; winningscore = player4T /20;}
   Serial.print("player");Serial.print(winning);Serial.print(" has won with:");Serial.print(winningscore);Serial.print(" seconds from the beep");
+  voice.say(sp2_NUMBER); sayNumber(winning); voice.say(spt_WON); voice.say(spt_WITH); sayNumber(winningscore); voice.say(sp2_SECONDS); 
 }
 void spel3(){
   Serial.println("spel3");
   long TIMEPERIOD = random(60) * 20;
   Serial.print("druk na "); Serial.print(TIMEPERIOD/20);Serial.println("seconden");
+  voice.say(sp2_PRESS); voice.say(spt_AFTER); sayNumber(TIMEPERIOD/20); voice.say(sp2_SECONDS);
+  delay(2000);
   int player1 = 0;
   int player2 = 0;
   int player3 = 0;
@@ -134,6 +150,8 @@ void spel3(){
   int player3T = 0;
   int player4T = 0;
   int winning = 0;
+  voice.say(sp4_START);
+  setupTimer1();
   counter = 0;
   counter2 =0;
   float winningscore = 0;
@@ -153,6 +171,7 @@ void spel3(){
   if (player3T >= 0 && player3T < player1T && player3T < player2T && player3T < player4T){winning = 3; winningscore = player3T /20;}
   if (player4T >= 0 && player4T < player1T && player4T < player2T && player4T < player3T){winning = 4; winningscore = player4T /20;}
   Serial.print("player");Serial.print(winning);Serial.print(" has won with:");Serial.print(winningscore);Serial.print(" seconds from point");
+  voice.say(sp2_NUMBER); sayNumber(winning); voice.say(spt_WON); voice.say(spt_WITH); sayNumber(winningscore); voice.say(sp2_SECONDS); 
 }
 
 void spel4(){
@@ -175,4 +194,133 @@ void setupTimer1() {
   // Output Compare Match A Interrupt Enable
   TIMSK1 |= (1 << OCIE1A);
   interrupts();
+}
+
+void sayNumber(long n) {
+    if (n < 0) {
+        voice.say(sp2_MINUS);
+        sayNumber(-n);
+    } else if (n == 0) {
+        voice.say(sp2_ZERO);
+    } else {
+        if (n >= 1000) {
+            int thousands = n / 1000;
+            sayNumber(thousands);
+            voice.say(sp2_THOUSAND);
+            n %= 1000;
+            if ((n > 0) && (n < 100))
+                voice.say(sp2_AND);
+        }
+        if (n >= 100) {
+            int hundreds = n / 100;
+            sayNumber(hundreds);
+            voice.say(sp2_HUNDRED);
+            n %= 100;
+            if (n > 0)
+                voice.say(sp2_AND);
+        }
+        if (n > 19) {
+            int tens = n / 10;
+            switch (tens) {
+            case 2:
+                voice.say(sp2_TWENTY);
+                break;
+            case 3:
+                voice.say(sp2_THIR_);
+                voice.say(sp2_T);
+                break;
+            case 4:
+                voice.say(sp2_FOUR);
+                voice.say(sp2_T);
+                break;
+            case 5:
+                voice.say(sp2_FIF_);
+                voice.say(sp2_T);
+                break;
+            case 6:
+                voice.say(sp2_SIX);
+                voice.say(sp2_T);
+                break;
+            case 7:
+                voice.say(sp2_SEVEN);
+                voice.say(sp2_T);
+                break;
+            case 8:
+                voice.say(sp2_EIGHT);
+                voice.say(sp2_T);
+                break;
+            case 9:
+                voice.say(sp2_NINE);
+                voice.say(sp2_T);
+                break;
+            }
+            n %= 10;
+        }
+        switch (n) {
+        case 1:
+            voice.say(sp2_ONE);
+            break;
+        case 2:
+            voice.say(sp2_TWO);
+            break;
+        case 3:
+            voice.say(sp2_THREE);
+            break;
+        case 4:
+            voice.say(sp2_FOUR);
+            break;
+        case 5:
+            voice.say(sp2_FIVE);
+            break;
+        case 6:
+            voice.say(sp2_SIX);
+            break;
+        case 7:
+            voice.say(sp2_SEVEN);
+            break;
+        case 8:
+            voice.say(sp2_EIGHT);
+            break;
+        case 9:
+            voice.say(sp2_NINE);
+            break;
+        case 10:
+            voice.say(sp2_TEN);
+            break;
+        case 11:
+            voice.say(sp2_ELEVEN);
+            break;
+        case 12:
+            voice.say(sp2_TWELVE);
+            break;
+        case 13:
+            voice.say(sp2_THIR_);
+            voice.say(sp2__TEEN);
+            break;
+        case 14:
+            voice.say(sp2_FOUR);
+            voice.say(sp2__TEEN);
+            break;
+        case 15:
+            voice.say(sp2_FIF_);
+            voice.say(sp2__TEEN);
+            break;
+        case 16:
+            voice.say(sp2_SIX);
+            voice.say(sp2__TEEN);
+            break;
+        case 17:
+            voice.say(sp2_SEVEN);
+            voice.say(sp2__TEEN);
+            break;
+        case 18:
+            voice.say(sp2_EIGHT);
+            voice.say(sp2__TEEN);
+            break;
+        case 19:
+            voice.say(sp2_NINE);
+            voice.say(sp2__TEEN);
+            break;
+        }
+    }
 }
