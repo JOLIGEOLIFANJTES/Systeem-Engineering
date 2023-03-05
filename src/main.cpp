@@ -1,9 +1,10 @@
-#include <Arduino.h>
+#include <Arduino.h> //include library's
 #include <Talkie.h>
 #include <Vocab_US_Large.h>
 #include <Vocab_Special.h>
 #include <Vocab_US_TI99.h>
-#define Knop1 4
+
+#define Knop1 4 //define knoppins
 #define Knop2 2 
 #define Knop3 6 
 #define Knop4 5 
@@ -12,31 +13,37 @@
 #define Knop7 9
 #define Knop8 10
 
-int counter = 0;
+int counter = 0; //define timer counters
 int counter0_05S =0;
 int counter2 = 0;
 
-Talkie voice;
+Talkie voice; //talkie library define
 
-void spel1();
+void spel1(); //define voids
 void spel2();
 void spel3();
 void spel4();
 void setupTimer1();
 void sayNumber(long n);
 
-ISR(TIMER1_COMPA_vect) {
-  counter0_05S = counter0_05S +1;
-  counter2 = counter2 +1;
-  if (counter0_05S == 20){
+ISR(TIMER1_COMPA_vect) {    //timer void (word elke 50ms)
+  counter0_05S = counter0_05S +1; //timer 50ms (gebruikt voor 1 sec timer)
+  counter2 = counter2 +1; //timer 50ms voor 50ms timer
+  if (counter0_05S == 20){  //if voor timer elke seconden
     counter = counter + 1;
     counter0_05S =0;
   }
 }
 
+<<<<<<< HEAD
 void setup() {
   Serial.begin(9600); //serial openen voor debugging
   pinMode(Knop1, INPUT_PULLUP); //pins setup
+=======
+void setup() { //void setup
+  Serial.begin(9600); //open serial voor debug
+  pinMode(Knop1, INPUT_PULLUP); //pin setup
+>>>>>>> Comentaar
   pinMode(Knop2, INPUT_PULLUP);
   pinMode(Knop3, INPUT_PULLUP);
   pinMode(Knop4, INPUT_PULLUP);
@@ -44,62 +51,75 @@ void setup() {
   pinMode(Knop6, INPUT_PULLUP);
   pinMode(Knop7, INPUT_PULLUP);
   pinMode(Knop8, INPUT_PULLUP);
+<<<<<<< HEAD
   setupTimer1(); //timer setup
+=======
+  setupTimer1(); //setup timer 50ms
+>>>>>>> Comentaar
   voice.say(spt_THERE); delay(100); voice.say(spt_ARE); delay(100); voice.say(sp3_THREE); delay(100); voice.say(spt_GAMES); delay(100); voice.say(spt_START); //zin uitspreken
 }
 
 void loop() {
-if(digitalRead(Knop1) == LOW){
+if(digitalRead(Knop1) == LOW){ //check of knop 1 ingedrukt is
   voice.say(sp2_ONE);
   spel1();
 }
-else if(digitalRead(Knop2) == LOW){
+else if(digitalRead(Knop2) == LOW){ //check of knop 2 ingedrukt is
   voice.say(sp2_TWO);
   spel2();
 }
-else if(digitalRead(Knop3) == LOW){
+else if(digitalRead(Knop3) == LOW){ //check of knop 3 ingedrukt is
   voice.say(sp2_THREE);
   spel3();
 }
-else if(digitalRead(Knop4) == LOW){
+else if(digitalRead(Knop4) == LOW){ //check of knop 4 ingedrukt is
   voice.say(sp2_FOUR);
   spel4();
 }
 }
 
 void spel1(){
-  Serial.print("spel1");
-  delay(500);
-  int player1 = 0, player2 =0, player3 =0, player4 =0;
+  int player1 = 0, player2 =0, player3 =0, player4 =0; //define alle variabelen die nodig zijn
   int winning = 1;
   const int TIMEPERIOD = 30;
   int winningscore = 0;
   int oldstatusknop1, oldstatusknop2, oldstatusknop3, oldstatusknop4;
-  voice.say(sp4_START);
-  setupTimer1();
-  counter =0;
-  while (counter < TIMEPERIOD) {
-  int statusknop1 = digitalRead(Knop5);
-  if (statusknop1 != oldstatusknop1){if(statusknop1 == LOW){player1 = player1 +1;}}
+  delay(500); //even wachten zodat het niet te snel gaat
+  voice.say(sp4_START); //say start
+  setupTimer1(); //setup timer 50ms (dit omdat de timer ook bij uitspreken word gebruikt)
+  counter =0; //set counter naar 0
+  while (counter < TIMEPERIOD) { //blijf herhalen tot counter < Timerperiode of ook wel 30 seconden lang
+  int statusknop1 = digitalRead(Knop5); //define variabelen
   int statusknop2 = digitalRead(Knop6); 
-  if (statusknop2 != oldstatusknop2){if(statusknop2 == LOW){player2 = player2 +1;}}
   int statusknop3 = digitalRead(Knop7); 
-  if (statusknop3 != oldstatusknop3){if(statusknop3 == LOW){player3 = player3 +1;}}
   int statusknop4 = digitalRead(Knop8); 
-  if (statusknop4 != oldstatusknop4){if(statusknop4 == LOW){player4 = player4 +1;}}
+  if (statusknop1 != oldstatusknop1){ //check of de status van de knop niet gelijk is aan de oude status
+    if(statusknop1 == LOW){ //check of de status van de knop niet ingedrukt is
+        player1 = player1 +1;}} //doe +1 bij de score van de player
+  if (statusknop2 != oldstatusknop2){
+    if(statusknop2 == LOW){
+        player2 = player2 +1;}}
+  if (statusknop3 != oldstatusknop3){
+    if(statusknop3 == LOW){
+        player3 = player3 +1;}}
+  if (statusknop4 != oldstatusknop4){
+    if(statusknop4 == LOW){
+        player4 = player4 +1;}}
   delay(50); 
-  oldstatusknop1 = statusknop1;
+  oldstatusknop1 = statusknop1; //oudestutus word gelijk aan nieuwe status gezet
   oldstatusknop2 = statusknop2;
   oldstatusknop3 = statusknop3;
   oldstatusknop4 = statusknop4;
-  Serial.println(counter);
+  Serial.println(counter); //serial print timer
   }
-  winningscore = player1;
-  if(winningscore < player2){ winning = 2; winningscore = player2;}
-  if(winningscore < player3){ winning = 3; winningscore = player3;}
-  if(winningscore < player4){ winning = 4; winningscore = player4;}
-  Serial.print("player");Serial.print(winning);Serial.print(" has won with:");Serial.print(winningscore);Serial.print(" points");
-  voice.say(sp2_NUMBER); sayNumber(winning); voice.say(spt_WON); voice.say(spt_WITH); sayNumber(winningscore); voice.say(sp2_PRESS); 
+  winningscore = player1; //winning word gelijk gezet aan de score van player 1
+  if(winningscore < player2){ // als winningscore kleiner is als die van player 2 zet deze naar de score van player 2 en sla op dat player 2 gewonnen heeft
+    winning = 2; winningscore = player2;} 
+  if(winningscore < player3){ 
+    winning = 3; winningscore = player3;}
+  if(winningscore < player4){ 
+    winning = 4; winningscore = player4;}
+  voice.say(sp2_NUMBER); sayNumber(winning); voice.say(spt_WON); voice.say(spt_WITH); sayNumber(winningscore); voice.say(sp2_PRESS); //spreek zin uit
 }
 
 void spel2(){
