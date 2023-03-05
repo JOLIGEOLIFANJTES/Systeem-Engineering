@@ -35,8 +35,8 @@ ISR(TIMER1_COMPA_vect) {
 }
 
 void setup() {
-  Serial.begin(9600);
-  pinMode(Knop1, INPUT_PULLUP);
+  Serial.begin(9600); //serial openen voor debugging
+  pinMode(Knop1, INPUT_PULLUP); //pins setup
   pinMode(Knop2, INPUT_PULLUP);
   pinMode(Knop3, INPUT_PULLUP);
   pinMode(Knop4, INPUT_PULLUP);
@@ -44,8 +44,8 @@ void setup() {
   pinMode(Knop6, INPUT_PULLUP);
   pinMode(Knop7, INPUT_PULLUP);
   pinMode(Knop8, INPUT_PULLUP);
-  setupTimer1();
-  voice.say(spt_THERE); delay(100); voice.say(spt_ARE); delay(100); voice.say(sp3_THREE); delay(100); voice.say(spt_GAMES); delay(100); voice.say(spt_START);
+  setupTimer1(); //timer setup
+  voice.say(spt_THERE); delay(100); voice.say(spt_ARE); delay(100); voice.say(sp3_THREE); delay(100); voice.say(spt_GAMES); delay(100); voice.say(spt_START); //zin uitspreken
 }
 
 void loop() {
