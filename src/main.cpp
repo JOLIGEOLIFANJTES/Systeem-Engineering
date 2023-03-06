@@ -1,3 +1,16 @@
+/**************************************************************************
+ * Naam: Chris
+ * Studentnummer: 1834625
+ * Klas: TDE-EV2A-04
+ * Opdracht: Systeem engineering
+ * Wat het doet: Dit programma stuur de spelkast aan gemaakt door Chris van Wijk
+ * 
+ *  Alle serial prints zijn puur voor testen
+ * 
+ * Bronnen gebruikt voor deze code:
+ * https://circuitdigest.com/microcontroller-projects/arduino-based-text-to-speech-converter
+ * Arduino Talkie voorbeelden
+**************************************************************************/
 #include <Arduino.h> //include library's
 #include <Talkie.h>
 #include <Vocab_US_Large.h>
@@ -35,15 +48,9 @@ ISR(TIMER1_COMPA_vect) {    //timer void (word elke 50ms)
   }
 }
 
-<<<<<<< HEAD
 void setup() {
   Serial.begin(9600); //serial openen voor debugging
   pinMode(Knop1, INPUT_PULLUP); //pins setup
-=======
-void setup() { //void setup
-  Serial.begin(9600); //open serial voor debug
-  pinMode(Knop1, INPUT_PULLUP); //pin setup
->>>>>>> Comentaar
   pinMode(Knop2, INPUT_PULLUP);
   pinMode(Knop3, INPUT_PULLUP);
   pinMode(Knop4, INPUT_PULLUP);
@@ -51,28 +58,28 @@ void setup() { //void setup
   pinMode(Knop6, INPUT_PULLUP);
   pinMode(Knop7, INPUT_PULLUP);
   pinMode(Knop8, INPUT_PULLUP);
-<<<<<<< HEAD
   setupTimer1(); //timer setup
-=======
-  setupTimer1(); //setup timer 50ms
->>>>>>> Comentaar
   voice.say(spt_THERE); delay(100); voice.say(spt_ARE); delay(100); voice.say(sp3_THREE); delay(100); voice.say(spt_GAMES); delay(100); voice.say(spt_START); //zin uitspreken
 }
 
 void loop() {
-if(digitalRead(Knop1) == LOW){ //check of knop 1 ingedrukt is
+if(digitalRead(Knop1) == LOW)//check of knop 1 ingedrukt is
+{ 
   voice.say(sp2_ONE);
   spel1();
 }
-else if(digitalRead(Knop2) == LOW){ //check of knop 2 ingedrukt is
+else if(digitalRead(Knop2) == LOW)//check of knop 2 ingedrukt is
+{
   voice.say(sp2_TWO);
   spel2();
 }
-else if(digitalRead(Knop3) == LOW){ //check of knop 3 ingedrukt is
+else if(digitalRead(Knop3) == LOW)//check of knop 3 ingedrukt is
+{ 
   voice.say(sp2_THREE);
   spel3();
 }
-else if(digitalRead(Knop4) == LOW){ //check of knop 4 ingedrukt is
+else if(digitalRead(Knop4) == LOW)//check of knop 4 ingedrukt is
+{
   voice.say(sp2_FOUR);
   spel4();
 }
@@ -123,82 +130,94 @@ void spel1(){
 }
 
 void spel2(){
-  Serial.println("spel2");
-  delay(500);
-  int player1 = 0;
-  int player2 = 0;
-  int player3 = 0;
-  int player4 = 0;
-  int player1T = 0;
-  int player2T = 0;
-  int player3T = 0;
-  int player4T = 0;
-  int winning = 0;
-  voice.say(sp4_START);
-  setupTimer1();
-  counter = 0;
-  counter2 =0;
-  long TIMEPERIOD = random(60) * 20;
-  Serial.println(TIMEPERIOD);
+  delay(500); //delay
+  int player1 = 0, player2 = 0, player3 = 0, player4 = 0; //define player variabelen
+  int player1T = 0, player2T = 0, player3T = 0, player4T = 0;
+  int winning = 0; //winning player variabelen
   float winningscore = 0;
-  while (player1 == 0 || player2 == 0 || player3 == 0 || player4 == 0) {
-    if(digitalRead(Knop5) == LOW){ if(player1 ==0){player1T = counter2 - TIMEPERIOD;} player1 = player1 +1;}
-    if(digitalRead(Knop6) == LOW){ if(player2 ==0){player2T = counter2 - TIMEPERIOD;} player2 = player2 +1;}
-    if(digitalRead(Knop7) == LOW){ if(player3 ==0){player3T = counter2 - TIMEPERIOD;} player3 = player3 +1;}
-    if(digitalRead(Knop8) == LOW){ if(player4 ==0){player4T = counter2 - TIMEPERIOD;} player4 = player4 +1;}
-    if(counter2 == TIMEPERIOD){ Serial.println("piep"); voice.say(spt_NOW); setupTimer1();}
+  voice.say(sp4_START); //say start
+  setupTimer1(); //timer setup
+  counter = 0; //counters naar 0 zetten
+  counter2 =0; 
+  long TIMEPERIOD = random(60) * 20; //random getal krijgen
+  while (player1 == 0 || player2 == 0 || player3 == 0 || player4 == 0) { //blijf herhalen tot alle knoppen ingedrukt zijn
+    if(digitalRead(Knop5) == LOW){ //digitalread knop5 en check of deze low is
+        if(player1 ==0){ //checken of player1 gelijk is aan 0
+            player1T = counter2 - TIMEPERIOD;} player1 = player1 +1;} //reken uit voor wie er wint
+    if(digitalRead(Knop6) == LOW){ 
+        if(player2 ==0){
+            player2T = counter2 - TIMEPERIOD;} player2 = player2 +1;}
+    if(digitalRead(Knop7) == LOW){ 
+        if(player3 ==0){
+            player3T = counter2 - TIMEPERIOD;} player3 = player3 +1;}
+    if(digitalRead(Knop8) == LOW){ 
+        if(player4 ==0){
+            player4T = counter2 - TIMEPERIOD;} player4 = player4 +1;}
+    if(counter2 == TIMEPERIOD){  //check of counter2 gelijk is aan de random timer
+        voice.say(spt_NOW); //say now
+        setupTimer1();} //setup timer opnieuw vanwege de spraak 
   }
-  if (player1T >= 0 && player1T < player2T && player1T < player3T && player1T < player4T){winning = 1; winningscore = player1T /20;}
-  if (player2T >= 0 && player2T < player1T && player2T < player3T && player2T < player4T){winning = 2; winningscore = player2T /20;}
-  if (player3T >= 0 && player3T < player1T && player3T < player2T && player3T < player4T){winning = 3; winningscore = player3T /20;}
-  if (player4T >= 0 && player4T < player1T && player4T < player2T && player4T < player3T){winning = 4; winningscore = player4T /20;}
-  Serial.print("player");Serial.print(winning);Serial.print(" has won with:");Serial.print(winningscore);Serial.print(" seconds from the beep");
-  voice.say(sp2_NUMBER); sayNumber(winning); voice.say(spt_WON); voice.say(spt_WITH); sayNumber(winningscore); voice.say(sp2_SECONDS); 
+  if (player1T >= 0 && player1T < player2T && player1T < player3T && player1T < player4T){ //check of de score van een andere player hoger is
+    winning = 1; winningscore = player1T /20;} //als player 1 de hoogste score heeft zet player 1 als winnende
+  if (player2T >= 0 && player2T < player1T && player2T < player3T && player2T < player4T){
+    winning = 2; winningscore = player2T /20;}
+  if (player3T >= 0 && player3T < player1T && player3T < player2T && player3T < player4T){
+    winning = 3; winningscore = player3T /20;}
+  if (player4T >= 0 && player4T < player1T && player4T < player2T && player4T < player3T){
+    winning = 4; winningscore = player4T /20;}
+  voice.say(sp2_NUMBER); sayNumber(winning); voice.say(spt_WON); voice.say(spt_WITH); sayNumber(winningscore); voice.say(sp2_SECONDS); //spreek zin uit wie er wint
 }
 void spel3(){
-  Serial.println("spel3");
-  long TIMEPERIOD = random(60) * 20;
-  Serial.print("druk na "); Serial.print(TIMEPERIOD/20);Serial.println("seconden");
-  voice.say(sp2_PRESS); voice.say(spt_AFTER); sayNumber(TIMEPERIOD/20); voice.say(sp2_SECONDS);
-  delay(2000);
-  int player1 = 0;
-  int player2 = 0;
-  int player3 = 0;
-  int player4 = 0;
-  int player1T = 0;
-  int player2T = 0;
-  int player3T = 0;
-  int player4T = 0;
-  int winning = 0;
-  voice.say(sp4_START);
-  setupTimer1();
-  counter = 0;
-  counter2 =0;
+  long TIMEPERIOD = random(60) * 20; //krijg een random nummer
+  voice.say(sp2_PRESS); voice.say(spt_AFTER); sayNumber(TIMEPERIOD/20); voice.say(sp2_SECONDS); //spreek zin uit na hoelang er gedrukt moet worden
+  delay(2000); //delay
+  int player1 = 0, player2 = 0, player3 = 0, player4 = 0; //define player variabelen
+  int player1T = 0, player2T = 0, player3T = 0, player4T = 0;
+  int winning = 0; //define winning variabelen
   float winningscore = 0;
+  voice.say(sp4_START); //zeg start
+  setupTimer1(); //setup timer
+  counter = 0; //zet timers naar 0
+  counter2 =0;
     while (player1 == 0 || player2 == 0 || player3 == 0 || player4 == 0) {
-    if(digitalRead(Knop5) == LOW){ if(player1 ==0){player1T = counter2 - TIMEPERIOD;} player1 = player1 +1;}
-    if(digitalRead(Knop6) == LOW){ if(player2 ==0){player2T = counter2 - TIMEPERIOD;} player2 = player2 +1;}
-    if(digitalRead(Knop7) == LOW){ if(player3 ==0){player3T = counter2 - TIMEPERIOD;} player3 = player3 +1;}
-    if(digitalRead(Knop8) == LOW){ if(player4 ==0){player4T = counter2 - TIMEPERIOD;} player4 = player4 +1;}
-    Serial.println(counter);
+    if(digitalRead(Knop5) == LOW){  //check of de knop ingedrukt is
+        if(player1 ==0){ //check of de knop nog niet eerder ingedrukt is
+            player1T = counter2 - TIMEPERIOD;} player1 = player1 +1;} //sla de tijd op van het drukken en stel in dat de knop al ingedrukt is
+    if(digitalRead(Knop6) == LOW){ 
+        if(player2 ==0){
+            player2T = counter2 - TIMEPERIOD;} player2 = player2 +1;}
+    if(digitalRead(Knop7) == LOW){ 
+        if(player3 ==0){
+            player3T = counter2 - TIMEPERIOD;} player3 = player3 +1;}
+    if(digitalRead(Knop8) == LOW){ 
+        if(player4 ==0){
+            player4T = counter2 - TIMEPERIOD;} player4 = player4 +1;}
+    Serial.println(counter); //print counter
   }
-  if (player1T < 0){player1T = player1T/-1;}
-  if (player2T < 0){player2T = player2T/-1;}
-  if (player3T < 0){player3T = player3T/-1;}
-  if (player4T < 0){player4T = player4T/-1;}
-  if (player1T >= 0 && player1T < player2T && player1T < player3T && player1T < player4T){winning = 1; winningscore = player1T /20;}
-  if (player2T >= 0 && player2T < player1T && player2T < player3T && player2T < player4T){winning = 2; winningscore = player2T /20;}
-  if (player3T >= 0 && player3T < player1T && player3T < player2T && player3T < player4T){winning = 3; winningscore = player3T /20;}
-  if (player4T >= 0 && player4T < player1T && player4T < player2T && player4T < player3T){winning = 4; winningscore = player4T /20;}
-  Serial.print("player");Serial.print(winning);Serial.print(" has won with:");Serial.print(winningscore);Serial.print(" seconds from point");
-  voice.say(sp2_NUMBER); sayNumber(winning); voice.say(spt_WON); voice.say(spt_WITH); sayNumber(winningscore); voice.say(sp2_SECONDS); 
+  if (player1T < 0){ //zet nagatieve waarde om in positieve waarde
+    player1T = player1T/-1;} 
+  if (player2T < 0){
+    player2T = player2T/-1;}
+  if (player3T < 0){
+    player3T = player3T/-1;}
+  if (player4T < 0){
+    player4T = player4T/-1;}
+  if (player1T >= 0 && player1T < player2T && player1T < player3T && player1T < player4T){ //check of de score van een andere player hoger is
+    winning = 1; winningscore = player1T /20;} //als player 1 de hoogste score heeft zet player 1 als winnende
+  if (player2T >= 0 && player2T < player1T && player2T < player3T && player2T < player4T){
+    winning = 2; winningscore = player2T /20;}
+  if (player3T >= 0 && player3T < player1T && player3T < player2T && player3T < player4T){
+    winning = 3; winningscore = player3T /20;}
+  if (player4T >= 0 && player4T < player1T && player4T < player2T && player4T < player3T){
+    winning = 4; winningscore = player4T /20;}
+  voice.say(sp2_NUMBER); sayNumber(winning); voice.say(spt_WON); voice.say(spt_WITH); sayNumber(winningscore); voice.say(sp2_SECONDS); //spreek zin uit wie er wint
 }
 
-void spel4(){
+void spel4(){ //spel 4 mogelijk
   
 }
 
-void setupTimer1() {
+void setupTimer1() { //setup timer1
   noInterrupts();
   // Clear registers
   TCCR1A = 0;
@@ -216,7 +235,12 @@ void setupTimer1() {
   interrupts();
 }
 
-void sayNumber(long n) {
+///////////////////////////////////////////////////////////
+// 
+//             Code gecopieerd van Arduino Talkie library voorbeelde -> voorbeeld Voltmeter
+//
+///////////////////////////////////////////////////////////
+void sayNumber(long n) { //void om getallen van -999 tot +999 uit te kunnen spreken
     if (n < 0) {
         voice.say(sp2_MINUS);
         sayNumber(-n);
